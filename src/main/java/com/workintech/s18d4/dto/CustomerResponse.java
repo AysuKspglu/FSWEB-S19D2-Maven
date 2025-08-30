@@ -1,10 +1,2 @@
-package com.workintech.s18d4.dto;
-
-public record CustomerResponse(
-        Long id,
-        String firstName,
-        String lastName,
-        String email,
-        Double salary,
-        Long addressId
-) {}
+package com.workintech.s18d4;
+public record CustomerResponse(long id, String email, double salary) {}

@@ -17,7 +17,6 @@ public class AddressServiceImpl implements AddressService {
     private final AddressRepository addressRepo;
     private final CustomerRepository customerRepo;
 
-    // === Testlerin istediği alias metodlar ===
     public Address find(Long id) { return addressRepo.findById(id).orElse(null); }
     public Address save(Address address) { return addressRepo.save(address); }
 
@@ -36,7 +35,8 @@ public class AddressServiceImpl implements AddressService {
     public Address update(Long id, Address address) {
         Address db = findById(id);
         db.setStreet(address.getStreet());
-        db.setNo(address.getNo()); // setNo(Long) artık mevcut
+        // Integer tabanlı: gelen Long/long da problemsiz (setter overloadları var)
+        db.setNo(address.getNo());
         db.setCity(address.getCity());
         db.setCountry(address.getCountry());
         db.setDescription(address.getDescription());

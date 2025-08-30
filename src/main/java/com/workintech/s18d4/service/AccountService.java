@@ -5,13 +5,11 @@ import java.util.List;
 
 public interface AccountService {
     List<Account> findAll();
+    Account find(long id);                 // <-- test böyle çağırıyor
     Account findById(Long id);
+    Account save(Account account);
     Account createForCustomer(Long customerId, Account account);
     Account updateForCustomer(Long customerId, Account account);
-
-    // 🆕 Silme işlemi artık silinen hesabı döndürüyor
-    Account delete(Long id);
-
-    // 🆕 Eğer test delete(Account) çağırıyorsa onu da karşılayalım
-    Account delete(Account account);
+    Account delete(Long id);               // silinen hesabı döndür
+    Account delete(Account account);       // opsiyonel
 }
