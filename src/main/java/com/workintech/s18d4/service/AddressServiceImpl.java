@@ -1,19 +1,25 @@
 package com.workintech.s18d4.service;
 
+import com.workintech.s18d4.entity.Address;
+import com.workintech.s18d4.entity.Customer;
 import com.workintech.s18d4.repository.AddressRepository;
 import com.workintech.s18d4.repository.CustomerRepository;
-import com.workintech.s18d4.entity.Address;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Service @RequiredArgsConstructor
+@Service
+@RequiredArgsConstructor
 public class AddressServiceImpl implements AddressService {
 
     private final AddressRepository addressRepo;
     private final CustomerRepository customerRepo;
+
+    // === Testlerin istediği alias metodlar ===
+    public Address find(Long id) { return addressRepo.findById(id).orElse(null); }
+    public Address save(Address address) { return addressRepo.save(address); }
 
     @Override
     public List<Address> findAll() { return addressRepo.findAll(); }
@@ -30,17 +36,17 @@ public class AddressServiceImpl implements AddressService {
     public Address update(Long id, Address address) {
         Address db = findById(id);
         db.setStreet(address.getStreet());
-        db.setNo(address.getNo());
+        db.setNo(address.getNo()); // setNo(Long) artık mevcut
         db.setCity(address.getCity());
         db.setCountry(address.getCountry());
         db.setDescription(address.getDescription());
         return addressRepo.save(db);
     }
 
-    // Address silinirse customer silinmeyecek → ilişkiyi kopar, sonra adresi sil
-    @Override @Transactional
+    @Override
+    @Transactional
     public void delete(Long id) {
-        customerRepo.findByAddress_Id(id).ifPresent(c -> {
+        customerRepo.findByAddress_Id(id).ifPresent((Customer c) -> {
             c.setAddress(null);
             customerRepo.save(c);
         });

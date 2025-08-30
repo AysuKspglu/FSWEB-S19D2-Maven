@@ -22,7 +22,7 @@ public class Address {
     @NotBlank
     private String street;
 
-    // Testlerde bazen int, bazen Long geliyor → Long tut
+    // Testlerde bazen int, bazen long/Long geliyor → Long tut
     @NotNull
     private Long no;
 
@@ -35,7 +35,7 @@ public class Address {
     // optional
     private String description;
 
-    // çift yönlü ilişki: sahibi Customer
+    // çift yönlü ilişki: sahibi Customer (owning side Customer.address)
     @JsonIgnore
     @OneToOne(mappedBy = "address")
     private Customer customer;
@@ -50,7 +50,6 @@ public class Address {
         this.description = description;
         this.customer = customer;
     }
-
     public Address(Long id, String street, Integer no, String city, String country, String description, Customer customer) {
         this.id = id;
         this.street = street;
@@ -61,13 +60,17 @@ public class Address {
         this.customer = customer;
     }
 
-    // ---------- EK SETTER'lar: int/Integer kabul etsin ----------
-    public void setNo(int no) { this.no = (long) no; }
-    public void setNo(Integer no) { this.no = (no == null ? null : no.longValue()); }
+    // ---------- SETTER overload'ları (tam kapsama) ----------
+    public void setNo(int no)      { this.no = (long) no; }
+    public void setNo(Integer no)  { this.no = (no == null ? null : no.longValue()); }
+    public void setNo(long no)     { this.no = no; }
+    public void setNo(Long no)     { this.no = no; }   // Long için explicit
 
-    // ---------- Builder override: no(int)/no(Integer) kabul etsin ----------
+    // ---------- Builder overload'ları (tam kapsama) ----------
     public static class AddressBuilder {
-        public AddressBuilder no(int no) { this.no = (long) no; return this; }
-        public AddressBuilder no(Integer no) { this.no = (no == null ? null : no.longValue()); return this; }
+        public AddressBuilder no(int no)      { this.no = (long) no; return this; }
+        public AddressBuilder no(Integer no)  { this.no = (no == null ? null : no.longValue()); return this; }
+        public AddressBuilder no(long no)     { this.no = no; return this; }
+        public AddressBuilder no(Long no)     { this.no = no; return this; }  // ← EKLENDİ
     }
 }
